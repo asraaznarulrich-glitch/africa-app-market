@@ -10,6 +10,9 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { Header, Footer } from "../components/Shell";
+import { CookieBanner } from "../components/CookieBanner";
+import consentDefaults from "../lib/consent-defaults.txt?raw";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -80,22 +83,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     // twitter:image here: every page without its own would inherit the root's preview image.
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { title: "AfriStore — Le store d'applications africain" },
+      { name: "description", content: "Découvrez et installez les meilleures apps africaines : PWA, Web Apps, APK et IPA." },
+      { name: "author", content: "AfriStore" },
+      { name: "theme-color", content: "#14161b" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "AfriStore" },
+      { property: "og:site_name", content: "AfriStore" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "apple-touch-icon", href: "/icon.svg" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" },
+    ],
+    scripts: [
+      { children: consentDefaults },
+      { type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "AfriStore", description: "Store alternatif d'applications africaines (PWA, Web Apps, APK, IPA). Hébergeur technique intermédiaire.", inLanguage: "fr", potentialAction: { "@type": "SearchAction", target: "/?q={search_term_string}", "query-input": "required name=search_term_string" } }) },
     ],
   }),
   shellComponent: RootShell,
@@ -106,7 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -124,7 +136,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <Header />
+      <main className="min-h-[70vh]"><Outlet /></main>
+      <Footer />
+      <CookieBanner />
     </QueryClientProvider>
   );
 }

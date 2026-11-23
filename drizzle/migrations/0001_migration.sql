@@ -1,0 +1,2 @@
+CREATE POLICY "binaries public read" ON storage.objects FOR SELECT USING (bucket_id = 'app-binaries');
+CREATE POLICY "binaries public upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'app-binaries' AND (lower(name) LIKE '%.apk' OR lower(name) LIKE '%.ipa'));

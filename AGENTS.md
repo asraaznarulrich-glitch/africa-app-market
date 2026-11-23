@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Data access goes only through `src/services/api.ts` (priority: VITE_API_URL REST > Lovable Cloud > localStorage mock) so the UI never changes when the backend does.
+- APK/IPA binaries live in the private `app-binaries` bucket; `download_url` stores `storage:<path>` and is resolved to a signed URL at read time (public buckets are blocked in this workspace).

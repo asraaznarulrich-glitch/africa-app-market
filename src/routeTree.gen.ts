@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DeveloppeursRouteImport } from './routes/developpeurs'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as AppIdRouteImport } from './routes/app.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeveloppeursRoute = DeveloppeursRouteImport.update({
+  id: '/developpeurs',
+  path: '/developpeurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIdRoute = AppIdRouteImport.update({
+  id: '/app/$id',
+  path: '/app/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/developpeurs': typeof DeveloppeursRoute
+  '/legal': typeof LegalRoute
+  '/app/$id': typeof AppIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/developpeurs': typeof DeveloppeursRoute
+  '/legal': typeof LegalRoute
+  '/app/$id': typeof AppIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/developpeurs': typeof DeveloppeursRoute
+  '/legal': typeof LegalRoute
+  '/app/$id': typeof AppIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/developpeurs' | '/legal' | '/app/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/developpeurs' | '/legal' | '/app/$id'
+  id: '__root__' | '/' | '/developpeurs' | '/legal' | '/app/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DeveloppeursRoute: typeof DeveloppeursRoute
+  LegalRoute: typeof LegalRoute
+  AppIdRoute: typeof AppIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/developpeurs': {
+      id: '/developpeurs'
+      path: '/developpeurs'
+      fullPath: '/developpeurs'
+      preLoaderRoute: typeof DeveloppeursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/$id': {
+      id: '/app/$id'
+      path: '/app/$id'
+      fullPath: '/app/$id'
+      preLoaderRoute: typeof AppIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DeveloppeursRoute: DeveloppeursRoute,
+  LegalRoute: LegalRoute,
+  AppIdRoute: AppIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
