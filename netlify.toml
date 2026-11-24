@@ -1,0 +1,9 @@
+# TanStack Start (Nitro) on Netlify. The `netlify` Nitro preset in
+# vite.config.ts emits static assets to `dist/` and the SSR server to
+# `.netlify/functions-internal` (deployed automatically as a Function),
+# so the publish directory must be `dist` — not the old `dist/client`
+# UI value and not `.output/public` (that layout belongs to the
+# `node-server` preset previously used for Render).
+[build]
+  command = "bun run build"
+  publish = "dist"

@@ -9,9 +9,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  // Render runs a normal Node web service, so Nitro must emit a Node server instead
-  // of the package's default Cloudflare Worker output.
-  nitro: { preset: "node-server" },
+  // Netlify runs the SSR server as a Netlify Function. The `netlify` preset
+  // emits static assets to `dist/` (the publish directory in netlify.toml)
+  // and the server handler to `.netlify/functions-internal`, which Netlify
+  // deploys automatically. Pinned explicitly so every build targets the same
+  // output layout instead of relying on platform auto-detection.
+  nitro: { preset: "netlify" },
   tanstackStart: {
     // Use the SSR error wrapper in src/server.ts.
     server: { entry: "src/server.ts" },
