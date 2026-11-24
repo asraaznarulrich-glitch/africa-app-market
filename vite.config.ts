@@ -11,8 +11,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
+    // Use the SSR error wrapper in src/server.ts. The old "server" path resolved
+    // to the unrelated root-level server.js and broke Nitro's default export lookup.
+    server: { entry: "src/server.ts" },
   },
 });
