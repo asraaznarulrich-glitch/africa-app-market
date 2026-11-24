@@ -1,14 +1,11 @@
 services:
   - type: web
     name: afristore
-    runtime: static
+    runtime: node
     plan: free
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist/client
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    startCommand: node .output/server/index.mjs
+    healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: "22"
