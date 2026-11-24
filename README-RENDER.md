@@ -1,21 +1,25 @@
 # Déployer AfriStore sur Render
 
-## Déploiement en 1 clic (Blueprint)
-1. Poussez ce dépôt sur GitHub.
-2. Sur Render : **New → Blueprint**, sélectionnez le dépôt. `render.yaml` est détecté.
-3. Choisissez le service voulu :
-   - `afristore` : **Node Web Service** (`node server.js`, Express). Ajoutez `express` : `npm i express`.
-   - `afristore-static` : **Static Site** publié depuis `dist/client`, réécriture SPA vers `index.html`.
-4. (Optionnel) Renseignez `VITE_API_URL` pour brancher votre backend.
+Le dépôt est configuré pour créer **un seul Static Site Render**, nommé `afristore`. C'est l'option la plus simple pour publier l'interface sans serveur Node ni dépendance Express.
 
-## Couche de données
-`src/services/api.ts` : sans `VITE_API_URL`, un mock complet avec persistance locale (localStorage) est utilisé.
-Avec `VITE_API_URL`, les mêmes fonctions appellent votre API REST :
-`GET /apps`, `GET /apps/:id`, `POST /apps`, `POST /apps/:id/reviews`, `POST /reports`.
+## Déploiement
 
-## Remarques
-- Le projet est construit avec TanStack Start. Selon la cible de build, vérifiez que `dist/client/index.html` existe pour le mode Static Site ; sinon utilisez le Web Service.
-- Vérifiez le build en local (`npm run build`) avant le premier déploiement.
+1. Dans Render, choisissez **New → Blueprint**.
+2. Connectez GitHub et sélectionnez `asraaznarulrich-glitch/africa-app-market`.
+3. Vérifiez le Blueprint puis cliquez sur **Apply**. Render lit `render.yaml`, installe les dépendances et exécute `npm run build`.
+4. À la fin du déploiement, ouvrez l'URL `onrender.com` fournie par Render.
 
-## Lovable Cloud
-Quand les variables `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` sont présentes, le catalogue, les avis et les signalements sont synchronisés dans la base Lovable Cloud, et les APK/IPA sont stockés dans le compartiment privé `app-binaries` (liens de téléchargement signés, valides 1 h). Ajoutez ces deux variables dans Render pour garder la synchronisation.
+Le site publie `dist/client` et réécrit les routes de l'application vers `index.html`, afin que les liens directs et le rechargement des pages fonctionnent. Node 22 est indiqué pour le build.
+
+## Données et configuration facultative
+
+Sans configuration supplémentaire, l'application démarre avec ses données de démonstration et la persistance du navigateur (`localStorage`). Les données locales ne sont pas partagées entre appareils et peuvent être effacées par le navigateur.
+
+Pour connecter un backend REST, ajoutez `VITE_API_URL` dans les variables d'environnement du service Render, puis redéployez. L'API doit fournir `GET /apps`, `GET /apps/:id`, `POST /apps`, `POST /apps/:id/reviews` et `POST /reports`.
+
+Si vous utilisez Lovable Cloud/Supabase, configurez aussi les variables publiques `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY` dans les variables d'environnement de build Render. Ne mettez jamais de clé secrète dans le code ou dans une variable `VITE_*`.
+
+## Dépannage
+
+- Si le build échoue, consultez les journaux du dernier déploiement Render et vérifiez que le build produit bien `dist/client`.
+- Après une modification des variables d'environnement, lancez un nouveau déploiement pour reconstruire les fichiers du frontend.
